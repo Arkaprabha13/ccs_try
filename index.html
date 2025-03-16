@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined Demo: 3D Card & Circular Image Gallery</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff; /* White background */
+            color: #333333;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin: 40px 0;
+        }
+
+        /* 3D Card Styles */
+        .card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+            perspective: 1000px;
+        }
+
+        .card {
+            width: 300px;
+            height: 400px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .card-content {
+            padding: 15px;
+            transform: translateZ(20px);
+        }
+
+        /* Circular Image Gallery Styles */
+        .gallery-container {
+            position: relative;
+            width: 100%; /* Width for 3 images (200px each) */
+            height: 30vw; /* Height of images */
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .gallery {
+            display: flex;
+            gap: 2vw; /* Gap between images */
+            white-space: nowrap;
+            transition: transform 0.3s ease-out;
+        }
+
+        .gallery img {
+            width: 30vw; /* Width of each image */
+            height: 30vw; /* Height of each image */
+            object-fit: cover;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D Card Section -->
+    <div class="section">
+        <div class="card-container">
+            <div class="card" id="card">
+                <img src="/ccs/IMG-20210528-WA0154.jpg" alt="Uploaded Image">
+                <div class="card-content">
+                    <h3>Constituency 16</h3>
+                    <p>Ashim Mohan Banerjee</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Circular Image Gallery Section -->
+    <div class="section">
+        <h1>Our Mission</h1>
+        <div class="gallery-container">
+            <div class="gallery" id="gallery">
+                <!-- Dynamically Generate Images -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 3D Card Effect
+        const card = document.getElementById("card");
+
+        card.addEventListener("mousemove", (e) => {
+            const { left, top, width, height } = card.getBoundingClientRect();
+            const x = (e.clientX - left - width / 2) / 10;
+            const y = (e.clientY - top - height / 2) / 10;
+            card.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+        });
+
+        card.addEventListener("mouseleave", () => {
+            card.style.transform = "rotateY(0deg) rotateX(0deg)";
+        });
+
+        // Circular Image Gallery Auto Scroll
+        const gallery = document.getElementById("gallery");
+        let clone = gallery.cloneNode(true);
+        gallery.parentNode.appendChild(clone);
+
+        // Dynamically Generate Image Tags
+        for (let i = 1; i <= 17; i++) {
+            const imgNumber = String(i).padStart(4, '0'); // Format number as 0001, 0002, etc.
+            const imgElement = document.createElement('img');
+            imgElement.src = `ilovepdf_pages-to-jpg/CCS_pages-to-jpg-${imgNumber}.jpg`; // Relative path
+            imgElement.alt = `Image ${i}`;
+            gallery.appendChild(imgElement);
+            clone.appendChild(imgElement.cloneNode(true)); // Clone for infinite scroll
+        }
+
+        let scrollSpeed = 1;
+
+        function autoScroll() {
+            gallery.style.transform = `translateX(${-scrollSpeed}px)`;
+            clone.style.transform = `translateX(${-scrollSpeed}px)`;
+            scrollSpeed += 1;
+
+            // Reset scroll position when it reaches the end of the original gallery
+            if (scrollSpeed >= gallery.scrollWidth / 2) {
+                scrollSpeed = 1;
+            }
+
+            requestAnimationFrame(autoScroll);
+        }
+
+        autoScroll();
+    </script>
+</body>
+</html>
