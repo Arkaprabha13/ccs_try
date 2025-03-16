@@ -71,8 +71,8 @@
         /* Circular Image Gallery Styles */
         .gallery-container {
             position: relative;
-            width: 100%; /* Width for 3 images (200px each) */
-            height: 30vw; /* Height of images */
+            width: 100%; /* Full width of the device */
+            height: 30vw; /* Height proportional to viewport width */
             margin: 0 auto;
             overflow: hidden;
         }
@@ -85,10 +85,22 @@
         }
 
         .gallery img {
-            width: 30vw; /* Width of each image */
-            height: 30vw; /* Height of each image */
+            width: 30vw; /* Default for desktop (3 images visible) */
+            height: 30vw; /* Maintain aspect ratio */
             object-fit: cover;
             border-radius: 10px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 767px) {
+            .gallery-container {
+                height: 90vw; /* Height proportional to viewport width for mobile */
+            }
+
+            .gallery img {
+                width: 90vw; /* Single image visible on mobile */
+                height: 90vw; /* Maintain aspect ratio */
+            }
         }
     </style>
 </head>
@@ -97,7 +109,7 @@
     <div class="section">
         <div class="card-container">
             <div class="card" id="card">
-                <img src="/ccs/IMG-20210528-WA0154.jpg" alt="Uploaded Image">
+                <img src="/ccs/cons16.jpg" alt="Uploaded Image">
                 <div class="card-content">
                     <h3>Constituency 16</h3>
                     <p>Ashim Mohan Banerjee</p>
